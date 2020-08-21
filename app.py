@@ -14,6 +14,7 @@ pass_inp = CONFIG.get('CREDENTIALS', 'PASSWORD')
 cvv_inp = CONFIG.get('ORDER', 'CVV') 
 addr_input = CONFIG.get('ORDER', 'ADDRESS')
 pay_opt_input = CONFIG.get('ORDER', 'PAYMENT')
+pay_opt_upi_type = CONFIG.get('ORDER', 'UPITYPE')
 
 bankname_input = CONFIG.get('EMIOPTIONS', 'BANK')
 tenure_input = CONFIG.get('EMIOPTIONS', 'TENURE')
@@ -85,6 +86,7 @@ def login_submit():
                         )
             form.click()
         print("Logged In Successfully")
+        time.sleep(0.5)
     except:
         if ('Login &amp; Signup' not in driver.page_source and 'Login & Signup' not in driver.page_source):
             print('Logged in Manually.')
@@ -169,12 +171,18 @@ def order_summary_continue():
         order_summary_continue()
         
 def choose_payment():
-    try:
+    try: 
         pay_opt_input_final = "//label[@for='"+pay_opt_input+"']"
         pay_method_sel = WebDriverWait(driver, 5).until(
                 EC.element_to_be_clickable((By.XPATH, pay_opt_input_final)) )
         pay_method_sel.click()
-
+        time.sleep(0.2)
+        if pay_opt_input == 'UPI':
+            pay_opt_upi_type_final = "//label[@for='"+pay_opt_upi_type+"']"
+            pay_opt_upi_type_sel = WebDriverWait(driver, 5).until(
+                    EC.element_to_be_clickable((By.XPATH, pay_opt_upi_type_final)) )
+            pay_opt_upi_type_sel.click()
+        print("payment method select click")
         if pay_opt_input == 'EMI_OPTIONS':
             emi_button = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, ".B7BM8s"))
